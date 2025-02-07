@@ -1,68 +1,156 @@
-# CodeIgniter 4 Application Starter
+Aplikasi Manajemen Produk dengan CodeIgniter 4
+Aplikasi ini adalah sistem manajemen produk sederhana yang dibangun menggunakan framework CodeIgniter 4. Aplikasi ini mencakup fitur-fitur seperti CRUD (Create, Read, Update, Delete) untuk produk, manajemen properti dinamis, validasi form, session management, dan file upload.
 
-## What is CodeIgniter?
+Fitur Utama
+Manajemen Produk:
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Tambah, lihat, edit, dan hapus produk.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Kategori produk dengan inheritance OOP.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+Properti dinamis untuk produk.
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+Autentikasi dan Session Management:
 
-## Installation & updates
+Sistem login untuk administrator.
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+Session management untuk mengontrol akses.
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+Upload Gambar Produk:
 
-## Setup
+Fitur upload gambar produk dengan validasi tipe file (JPG, PNG).
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+Validasi Form dan Error Handling:
 
-## Important Change with index.php
+Validasi input form sebelum disimpan ke database.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+Penanganan error saat berinteraksi dengan database.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+Routing dan Struktur Proyek:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+Routing yang terorganisir.
 
-## Repository Management
+Struktur folder yang konsisten.
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Caching dengan Redis:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+Integrasi Redis untuk caching data produk.
 
-## Server Requirements
+Dokumentasi dan Komentar Kode:
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+Komentar di setiap kelas, fungsi, dan bagian penting dari kode.
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+File README.md untuk panduan instalasi dan penggunaan.
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+Persyaratan Sistem
+PHP versi 7.4 atau lebih baru.
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+Composer (untuk manajemen dependensi).
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+MySQL atau MariaDB.
+
+Redis (opsional, untuk caching).
+
+Git (opsional, untuk mengunduh proyek).
+
+Instalasi
+Clone Repositori:
+
+bash
+Copy
+git clone https://github.com/username/product-management.git
+cd product-management
+Install Dependensi:
+Jalankan perintah berikut untuk menginstal dependensi yang diperlukan:
+
+bash
+Copy
+composer install
+Setup Database:
+
+Buat database baru di MySQL (misalnya, product_management).
+
+Konfigurasi koneksi database di file .env:
+
+env
+Copy
+database.default.hostname = localhost
+database.default.database = product_management
+database.default.username = root
+database.default.password = 
+database.default.DBDriver = MySQLi
+Migrasi Database:
+
+Jalankan perintah berikut untuk membuat tabel di database:
+
+sql
+Copy
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE product_properties (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT,
+    property_name VARCHAR(255),
+    property_value TEXT,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+Setup Redis (Opsional):
+
+Jika Anda ingin menggunakan Redis untuk caching, pastikan Redis terinstal dan konfigurasikan di file .env:
+
+env
+Copy
+redis.default.host = 127.0.0.1
+redis.default.password = 
+redis.default.port = 6379
+redis.default.timeout = 0
+Jalankan Aplikasi:
+
+Jalankan server development dengan perintah:
+
+bash
+Copy
+php spark serve
+Buka browser dan akses http://localhost:8080.
+
+Struktur Folder
+Copy
+product-management/
+├── app/
+│   ├── Config/
+│   ├── Controllers/
+│   ├── Models/
+│   ├── Views/
+│   └── ...
+├── public/
+├── vendor/
+├── writable/
+└── .env
+Cara Menggunakan
+Menambah Produk:
+
+Akses /products/create untuk menambahkan produk baru.
+
+Isi formulir dan upload gambar produk.
+
+Melihat Daftar Produk:
+
+Akses /products untuk melihat daftar produk yang ada.
+
+Mengedit Produk:
+
+Akses /products/edit/{id} untuk mengedit produk.
+
+Menghapus Produk:
+
+Akses /products/delete/{id} untuk menghapus produk.
+
+Menambahkan Properti Dinamis:
+
+Akses /products/edit/{id} dan gunakan formulir tambah properti dinamis.
